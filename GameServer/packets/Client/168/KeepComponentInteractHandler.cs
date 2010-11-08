@@ -35,7 +35,7 @@ namespace DOL.GS.PacketHandler.Client.v168
 
 			AbstractGameKeep keep = KeepMgr.getKeepByID(keepId);
 
-			if (keep == null || !(GameServer.ServerRules.IsSameRealm(client.Player, (GameKeepComponent)keep.KeepComponents[wallId], true) || client.Account.PrivLevel > 1))
+			if (keep == null || !(GameServer.ServerRules.IsSameRealm(client.Player, (GameKeepComponent)keep.KeepComponents[wallId], true) || PrivilegeMgr.IsGameMaster(client)))
 				return;
 
 			if (responce == 0x00)//show info
@@ -44,7 +44,7 @@ namespace DOL.GS.PacketHandler.Client.v168
 				client.Out.SendKeepComponentHookPoint(((GameKeepComponent)keep.KeepComponents[wallId]), HPindex);
 			else if (responce == 0x02)//select an hookpoint
 			{
-				if (client.Account.PrivLevel > 1)
+				if (PrivilegeMgr.IsGameMaster(client))
 					client.Out.SendMessage("DEBUG : selected hookpoint id " + HPindex, eChatType.CT_Say, eChatLoc.CL_SystemWindow);
 
 				GameKeepComponent hp = keep.KeepComponents[wallId] as GameKeepComponent;

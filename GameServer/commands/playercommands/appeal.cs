@@ -56,7 +56,7 @@ namespace DOL.GS.Commands
             if (args.Length == 1)
             {
                 DisplaySyntax(client);
-                if (client.Account.PrivLevel > (uint)ePrivLevel.Player)
+                if (PrivilegeMgr.IsGameMaster(client))
                 {
                     AppealMgr.MessageToClient(client, LanguageMgr.GetTranslation(client, "Scripts.Players.Appeal.UseGMappeal"));
                 }

@@ -282,7 +282,7 @@ namespace DOL.GS
 				                        reuseTimeSpan.ToString().Substring(3)));
 			}
 
-			if (player.Client.Account.PrivLevel > 1)
+			if (PrivilegeMgr.IsGameMaster(player))
 				WriteTechnicalInfo(delve);
 			
 		}

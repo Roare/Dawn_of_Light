@@ -537,11 +537,10 @@ namespace DOL.GS
 				toSlot = GetValidInventorySlot(toSlot);
 				if (fromSlot == eInventorySlot.Invalid || toSlot == eInventorySlot.Invalid)
 				{
-					if (m_player.Client.Account.PrivLevel > 1)
+					if (PrivilegeMgr.IsGameMaster(m_player))
 					{
 						m_player.Out.SendMessage("Invalid slot.", eChatType.CT_Skill, eChatLoc.CL_SystemWindow);
 					}
-
 					return false;
 				}
 
@@ -574,7 +573,7 @@ namespace DOL.GS
 					valid = false;
 				
 				/*************** Horse Inventory **************/
-				if (m_player.Client.Account.PrivLevel == 1 &&
+				if (!PrivilegeMgr.IsGameMaster(m_player) &&
 				    ((toSlot >= eInventorySlot.FirstBagHorse && toSlot <= eInventorySlot.LastBagHorse) ||
 				     (fromSlot >= eInventorySlot.FirstBagHorse && fromSlot <= eInventorySlot.LastBagHorse)))
 				{
@@ -628,7 +627,7 @@ namespace DOL.GS
 						string[] allowedclasses = fromItem.AllowedClasses.Split(';');
 						foreach (string allowed in allowedclasses)
 						{
-							if (m_player.CharacterClass.ID.ToString() == allowed || m_player.Client.Account.PrivLevel > 1)
+							if (m_player.CharacterClass.ID.ToString() == allowed || PrivilegeMgr.IsGameMaster(m_player))
 							{
 								valid = true;
 								break;
@@ -651,7 +650,7 @@ namespace DOL.GS
 						string[] allowedclasses = toItem.AllowedClasses.Split(';');
 						foreach (string allowed in allowedclasses)
 						{
-							if (m_player.CharacterClass.ID.ToString() == allowed || m_player.Client.Account.PrivLevel > 1)
+							if (m_player.CharacterClass.ID.ToString() == allowed || PrivilegeMgr.IsGameMaster(m_player))
 							{
 								valid = true;
 								break;
@@ -850,7 +849,7 @@ namespace DOL.GS
 				if (valid && (fromItem.Realm > 0 && (int) m_player.Realm != fromItem.Realm) &&
 				    (toSlot >= eInventorySlot.HorseArmor && toSlot <= eInventorySlot.HorseBarding))
 				{
-					if (m_player.Client.Account.PrivLevel == 1)
+					if (!PrivilegeMgr.IsGameMaster(m_player))
 					{
 						valid = false;
 					}

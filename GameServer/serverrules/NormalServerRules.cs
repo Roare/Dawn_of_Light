@@ -117,9 +117,9 @@ namespace DOL.GS.ServerRules
 			}
 
 			// clients with priv level > 1 are considered friendly by anyone
-			if(target is GamePlayer && ((GamePlayer)target).Client.Account.PrivLevel > 1) return true;
+			if(target is GamePlayer && PrivilegeMgr.IsGameMaster(target as GamePlayer)) return true;
 			// checking as a gm, targets are considered friendly
-			if (source is GamePlayer && ((GamePlayer)source).Client.Account.PrivLevel > 1) return true;
+			if (source is GamePlayer && PrivilegeMgr.IsGameMaster(source as GamePlayer)) return true;
 
 			//Peace flag NPCs are same realm
 			if (target is GameNPC)
@@ -180,7 +180,7 @@ namespace DOL.GS.ServerRules
 			// clients with priv level > 1 are allowed to trade with anyone
 			if(source is GamePlayer && target is GamePlayer)
 			{
-				if ((source as GamePlayer).Client.Account.PrivLevel > 1 ||(target as GamePlayer).Client.Account.PrivLevel > 1)
+				if (PrivilegeMgr.IsGameMaster(source as GamePlayer) || PrivilegeMgr.IsGameMaster(target as GamePlayer))
 					return true;
 			}
 
@@ -206,8 +206,8 @@ namespace DOL.GS.ServerRules
 			if(source == null || target == null) return false;
 
 			// clients with priv level > 1 are allowed to talk and hear anyone
-			if(source is GamePlayer && ((GamePlayer)source).Client.Account.PrivLevel > 1) return true;
-			if(target.Client.Account.PrivLevel > 1) return true;
+			if(source is GamePlayer && PrivilegeMgr.IsGameMaster(source as GamePlayer)) return true;
+			if(PrivilegeMgr.IsGameMaster(target as GamePlayer)) return true;
 
 			//Peace flag NPCs can be understood by everyone
 

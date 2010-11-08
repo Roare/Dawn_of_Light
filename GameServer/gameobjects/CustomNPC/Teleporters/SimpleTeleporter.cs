@@ -66,10 +66,10 @@ namespace DOL.GS
 			if (player.InCombat)
 				return false;
 
-			if (Realm != eRealm.None && Realm != player.Realm && player.Client.Account.PrivLevel == (int)ePrivLevel.Player)
+			if (Realm != eRealm.None && Realm != player.Realm && !PrivilegeMgr.IsGameMaster(player.Client))
 				return false;
 
-			if ((GuildName == null || GuildName.Length == 0) && player.Client.Account.PrivLevel > (int)ePrivLevel.Player)
+			if ((GuildName == null || GuildName.Length == 0) && PrivilegeMgr.IsGameMaster(player.Client))
 			{
 				SayTo(player, "I have not been set up properly, I need a guild name in order to work.");
 				SayTo(player, "You can set what I say to players by setting the packageid with /mob package \"Some Text\"");
@@ -94,7 +94,7 @@ namespace DOL.GS
 				numDestinations++;
 			}
 
-			if (numDestinations == 0 && player.Client.Account.PrivLevel > (int)ePrivLevel.Player)
+			if (numDestinations == 0 && PrivilegeMgr.IsGameMaster (player.Client))
 			{
 				SayTo(player, "I have not been set up properly, I need teleport locations.  Do /teleport add \"Destination Name\" \"" + GuildName + "\"");
 			}
@@ -123,13 +123,13 @@ namespace DOL.GS
 			if (player.InCombat)
 				return false;
 
-			if (player.Client.Account.PrivLevel > 1 && text.ToLower() == "refresh")
+			if (PrivilegeMgr.IsGameMaster(player) && text.ToLower() == "refresh")
 			{
 				m_destinations.Clear();
 				return false;
 			}
 
-			if (Realm != eRealm.None && Realm != player.Realm && player.Client.Account.PrivLevel == (int)ePrivLevel.Player)
+			if (Realm != eRealm.None && Realm != player.Realm && !PrivilegeMgr.IsGameMaster(player.Client))
 				return false;
 
 			Teleport destination = null;

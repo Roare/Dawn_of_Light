@@ -386,7 +386,7 @@ namespace DOL.GS.Keeps
 			}
 
 
-			if (!KeepMgr.IsEnemy(this, player) || player.Client.Account.PrivLevel != 1)
+			if (!KeepMgr.IsEnemy(this, player) || PrivilegeMgr.IsGameMaster(player))
 			{
 				int keepz = Z, distance = 0;
 

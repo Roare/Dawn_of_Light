@@ -103,7 +103,7 @@ namespace DOL.GS.PacketHandler.Client.v168
 					Regex nameCheck = new Regex("^[A-Z][a-zA-Z]");
 					if (charName.Length < 3 || !nameCheck.IsMatch(charName))
 					{
-						if (client.Account.PrivLevel == 1)
+						if (!PrivilegeMgr.IsGameMaster(client))
 						{
 							if (ServerProperties.Properties.BAN_HACKERS)
 							{
@@ -219,7 +219,7 @@ namespace DOL.GS.PacketHandler.Client.v168
 			              where j == ch.Class.ToString()
 			              select j).Count();
 
-			if (occurences > 0 && (ePrivLevel)client.Account.PrivLevel == ePrivLevel.Player)
+			if (occurences > 0 && !PrivilegeMgr.IsGameMaster(client))
 			{
 				log.Debug("Client " + client.Account.Name + " tried to create a disabled classe: " + (eCharacterClass)ch.Class);
 				client.Out.SendCharacterOverview((eRealm)ch.Realm);
@@ -273,7 +273,7 @@ namespace DOL.GS.PacketHandler.Client.v168
 			occurences = (from j in disabled_races
 			              where j == ch.Race.ToString()
 			              select j).Count();
-			if (occurences > 0 && (ePrivLevel)client.Account.PrivLevel == ePrivLevel.Player)
+			if (occurences > 0 && !PrivilegeMgr.IsGameMaster(client))
 			{
 				log.Debug("Client " + client.Account.Name + " tried to create a disabled race: " + (eRace)ch.Race);
 				client.Out.SendCharacterOverview((eRealm)ch.Realm);
@@ -411,7 +411,7 @@ namespace DOL.GS.PacketHandler.Client.v168
 
 			#region starting guilds
 
-			if (account.PrivLevel == 1 && Properties.STARTING_GUILD)
+			if (!PrivilegeMgr.IsGameMaster(account) && Properties.STARTING_GUILD)
 			{
 				switch (ch.Realm)
 				{
@@ -648,7 +648,7 @@ namespace DOL.GS.PacketHandler.Client.v168
 								if (!validBeginStat)
 								{
 									valid = false;
-									if (client.Account.PrivLevel == 1)
+									if (!PrivilegeMgr.IsGameMaster(client))
 									{
 										if (ServerProperties.Properties.BAN_HACKERS)
 										{
@@ -734,7 +734,7 @@ namespace DOL.GS.PacketHandler.Client.v168
 
 				if (customizationMode == 2) // change player customization
 				{
-					if (client.Account.PrivLevel == 1 && ((newModel >> 11) & 3) == 0) // Player size must be > 0 (from 1 to 3)
+					if (!PrivilegeMgr.IsGameMaster(client) && ((newModel >> 11) & 3) == 0) // Player size must be > 0 (from 1 to 3)
 					{
 						DBBannedAccount b = new DBBannedAccount();
 						b.Author = "SERVER";

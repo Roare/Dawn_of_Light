@@ -34,7 +34,7 @@ namespace DOL.GS.Commands
 			if (IsSpammingCommand(client.Player, "language"))
 				return;
 
-			if (client.Account.PrivLevel == (uint) ePrivLevel.Player &&
+			if (!PrivilegeMgr.IsGameMaster(client) &&
 			    DOL.GS.ServerProperties.Properties.ALLOW_CHANGE_LANGUAGE == false)
 			{
 				client.Out.SendMessage(LanguageMgr.GetTranslation(client, "Scripts.Players.Language.Current", LanguageMgr.LangsToCompleteName(client, LanguageMgr.NameToLangs(client.Account.Language))), eChatType.CT_System, eChatLoc.CL_SystemWindow);
@@ -50,7 +50,7 @@ namespace DOL.GS.Commands
 			}
 			else
 			{
-				if (client.Account.PrivLevel != (uint)ePrivLevel.Player)
+				if (PrivilegeMgr.IsGameMaster(client))
 				{
 					switch (args[1].ToLower())
 					{

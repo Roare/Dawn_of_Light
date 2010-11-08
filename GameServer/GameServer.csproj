@@ -2496,6 +2496,7 @@
     <Compile Include="trainer\midgard\WarriorTrainer.cs">
       <SubType>Code</SubType>
     </Compile>
+    <Compile Include="PrivilegeMgr.cs" />
     <Compile Include="world\AbstractArea.cs">
       <SubType>Code</SubType>
     </Compile>

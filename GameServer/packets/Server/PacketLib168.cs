@@ -771,7 +771,7 @@ namespace DOL.GS.PacketHandler
 				var npc = obj as GameNPC;
 				flags = (byte) (GameServer.ServerRules.GetLivingRealm(m_gameClient.Player, npc) << 6);
 
-				if (m_gameClient.Account.PrivLevel < 2)
+				if (!PrivilegeMgr.IsGameMaster(m_gameClient))
 				{
 					// no name only if normal player
 					if ((npc.Flags & GameNPC.eFlags.CANTTARGET) != 0)
@@ -935,7 +935,7 @@ namespace DOL.GS.PacketHandler
 		{
 			using (var pak = new GSTCPPacketOut(GetPacketCode(eServerPackets.DebugMode)))
 			{
-				if (m_gameClient.Account.PrivLevel == 1)
+				if (!PrivilegeMgr.IsGameMaster(m_gameClient))
 				{
 					pak.WriteByte((0x00));
 				}
@@ -1026,7 +1026,7 @@ namespace DOL.GS.PacketHandler
 				pak.WriteByte(0x20); //TODO this is the default maxstick distance
 
 				string add = "";
-				if (m_gameClient.Account.PrivLevel > 1)
+				if (PrivilegeMgr.IsGameMaster(m_gameClient))
 				{
 					if ((npc.Flags & GameNPC.eFlags.CANTTARGET) != 0)
 						add += "-DOR"; // indicates DOR flag for GMs
@@ -2707,13 +2707,13 @@ namespace DOL.GS.PacketHandler
 
 		public virtual void SendDebugMessage(string format, params object[] parameters)
 		{
-			if (m_gameClient.Account.PrivLevel > (int)ePrivLevel.Player || ServerProperties.Properties.ENABLE_DEBUG)
+			if (PrivilegeMgr.IsGameMaster(m_gameClient) || ServerProperties.Properties.ENABLE_DEBUG)
 				SendMessage(String.Format("[DEBUG] " + format, parameters), eChatType.CT_System, eChatLoc.CL_SystemWindow);
 		}
 
 		public virtual void SendDebugPopupMessage(string format, params object[] parameters)
 		{
-			if (m_gameClient.Account.PrivLevel > (int)ePrivLevel.Player || ServerProperties.Properties.ENABLE_DEBUG)
+			if (PrivilegeMgr.IsGameMaster(m_gameClient) || ServerProperties.Properties.ENABLE_DEBUG)
 				SendMessage(String.Format("[DEBUG] " + format, parameters), eChatType.CT_System, eChatLoc.CL_PopupWindow);
 		}
 

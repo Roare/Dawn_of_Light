@@ -209,7 +209,7 @@ namespace DOL.GS.PacketHandler.Client.v168
 				int gracePeriodInMinutes = 0;
 				Int32.TryParse(Properties.RVR_LINK_DEATH_RELOG_GRACE_PERIOD, out gracePeriodInMinutes);
 				AbstractGameKeep keep = KeepMgr.getKeepCloseToSpot(player.CurrentRegionID, player, WorldMgr.VISIBILITY_DISTANCE);
-				if (keep != null && player.Client.Account.PrivLevel == 1 && KeepMgr.IsEnemy(keep, player))
+				if (keep != null && !PrivilegeMgr.IsGameMaster(player) && KeepMgr.IsEnemy(keep, player))
 				{
 					if (WorldMgr.RvRLinkDeadPlayers.ContainsKey(player.InternalID))
 					{

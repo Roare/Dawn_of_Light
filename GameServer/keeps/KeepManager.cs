@@ -550,7 +550,7 @@ namespace DOL.GS.Keeps
 		/// <returns>true if the player is an enemy of the keep</returns>
 		public static bool IsEnemy(AbstractGameKeep keep, GamePlayer target, bool checkGroup)
 		{
-			if (target.Client.Account.PrivLevel != 1)
+			if (PrivilegeMgr.IsGameMaster(target))
 				return false;
 
 			switch (GameServer.Instance.Configuration.ServerType)

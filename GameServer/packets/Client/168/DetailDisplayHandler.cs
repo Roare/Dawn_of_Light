@@ -268,7 +268,7 @@ namespace DOL.GS.PacketHandler.Client.v168
 						}
 
 						//Add admin info
-						if (client.Account.PrivLevel > 1)
+						if (PrivilegeMgr.IsGameMaster(client))
 						{
 							WriteTechnicalInfo(objectInfo, invItem);
 						}
@@ -443,7 +443,7 @@ namespace DOL.GS.PacketHandler.Client.v168
 							WritePotionInfo(objectInfo, item, client);
 
 						//Add admin info
-						if (client.Account.PrivLevel > 1)
+						if (!PrivilegeMgr.IsGameMaster(client))
 						{
 							WriteTechnicalInfo(objectInfo, GameInventoryItem.Create<ItemTemplate>(item), item.MaxDurability, item.MaxCondition);
 						}
@@ -752,7 +752,7 @@ namespace DOL.GS.PacketHandler.Client.v168
 							WritePotionInfo(objectInfo, invItem, client);
 
 						//Add admin info
-						if (client.Account.PrivLevel > 1)
+						if (!PrivilegeMgr.IsGameMaster(client))
 						{
 							WriteTechnicalInfo(objectInfo, invItem);
 						}
@@ -1079,7 +1079,7 @@ namespace DOL.GS.PacketHandler.Client.v168
 					output.AddRange(sh.DelveInfo);
 				}
 			}
-			if (client.Account.PrivLevel > 1)
+			if (!PrivilegeMgr.IsGameMaster(client))
 			{
 				output.Add("----------Technical informations----------");
 				output.Add("Line: " + (spellHandler == null ? spellLine.KeyName : spellHandler.SpellLine.Name));

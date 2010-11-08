@@ -481,7 +481,7 @@ namespace DOL.GS
 		{
 			base.ModifyAttack(attackData);
 
-			if ((Owner as GamePlayer).Client.Account.PrivLevel > (int)ePrivLevel.Player)
+			if (PrivilegeMgr.IsGameMaster ((Owner as GamePlayer).Client))
 			{
 				attackData.Damage = 0;
 				attackData.CriticalDamage = 0;

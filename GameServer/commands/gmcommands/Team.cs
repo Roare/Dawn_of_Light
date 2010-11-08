@@ -45,7 +45,7 @@ namespace DOL.GS.Commands
 
 			foreach (GameClient player in WorldMgr.GetAllPlayingClients())
 			{
-				if (player.Account.PrivLevel > 1)
+				if (PrivilegeMgr.IsGameMaster(player))
 				{
 					player.Out.SendMessage("[StaffInformation-" + client.Player.Name + "]:\n " + msg, eChatType.CT_Staff, eChatLoc.CL_ChatWindow);
 				}

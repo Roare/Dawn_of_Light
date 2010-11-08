@@ -67,7 +67,7 @@ namespace DOL.GS.PacketHandler.Client.v168
 						client.Out.SendWarmapUpdate(KeepMgr.getKeepsByRealmMap(client.Player.WarMapPage));
 						WarMapMgr.SendFightInfo(client);
 
-						if (client.Account.PrivLevel == (int)ePrivLevel.Player &&
+						if (!PrivilegeMgr.IsGameMaster(client) &&
 							(client.Player.InCombat || client.Player.CurrentRegionID != 163 || GameRelic.IsPlayerCarryingRelic(client.Player)))
 						{
 							return;
@@ -85,7 +85,7 @@ namespace DOL.GS.PacketHandler.Client.v168
 							return;
 						}
 
-						if (client.Account.PrivLevel == (int)ePrivLevel.Player)
+						if (!PrivilegeMgr.IsGameMaster(client))
 						{
 							bool found = false;
 

@@ -62,7 +62,7 @@ namespace DOL.GS.PacketHandler.Client.v168
 			}
 
 			// debug text
-			if (client.Account.PrivLevel > 1 || Properties.ENABLE_DEBUG)
+			if (PrivilegeMgr.IsGameMaster(client) || Properties.ENABLE_DEBUG)
 			{
 				if (doorType == 7)
 				{
@@ -111,7 +111,7 @@ namespace DOL.GS.PacketHandler.Client.v168
 					return;
 				}
 
-				if (client.Account.PrivLevel == 1)
+				if (!PrivilegeMgr.IsGameMaster(client))
 				{
 					if (door.Locked == 0)
 					{
@@ -141,7 +141,7 @@ namespace DOL.GS.PacketHandler.Client.v168
 					}
 				}
 
-				if (client.Account.PrivLevel > 1)
+				if (PrivilegeMgr.IsGameMaster(client))
 				{
 					client.Out.SendDebugMessage("GM: Forcing locked door open.");
 					new ChangeDoorAction(client.Player, doorID, doorState, radius).Start(1);
@@ -151,7 +151,7 @@ namespace DOL.GS.PacketHandler.Client.v168
 
 			if (door == null)
 			{
-				if (doorType != 9 && client.Account.PrivLevel > 1 && client.Player.CurrentRegion.IsInstance == false)
+				if (doorType != 9 && PrivilegeMgr.IsGameMaster(client) && client.Player.CurrentRegion.IsInstance == false)
 				{
 					if (client.Player.TempProperties.getProperty(DoorMgr.WANT_TO_ADD_DOORS, false))
 					{
@@ -287,7 +287,7 @@ namespace DOL.GS.PacketHandler.Client.v168
 				else
 				{
 					//new frontiers we don't want this, i.e. relic gates etc
-					if (player.CurrentRegionID == 163 && player.Client.Account.PrivLevel == 1)
+					if (player.CurrentRegionID == 163 && !PrivilegeMgr.IsGameMaster(player))
 						return;
 					/*
 					//create a bug report

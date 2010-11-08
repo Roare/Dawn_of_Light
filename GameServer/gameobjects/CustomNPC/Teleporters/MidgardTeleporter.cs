@@ -98,7 +98,7 @@ namespace DOL.GS
 			switch (destination.TeleportID.ToLower())
 			{
 				case "battlegrounds":
-					if (!ServerProperties.Properties.BG_ZONES_OPENED && player.Client.Account.PrivLevel == (uint)ePrivLevel.Player)
+					if (!ServerProperties.Properties.BG_ZONES_OPENED && !PrivilegeMgr.IsGameMaster(player.Client))
 					{
 						SayTo(player, ServerProperties.Properties.BG_ZONES_CLOSED_MESSAGE);
 						return;
@@ -132,11 +132,6 @@ namespace DOL.GS
 					}
 					break;
 				case "oceanus":
-					if (player.Client.Account.PrivLevel < ServerProperties.Properties.ATLANTIS_TELEPORT_PLVL)
-					{
-						SayTo(player, "I'm sorry, but you are not authorized to enter Atlantis at this time.");
-						return;
-					}
 					SayTo(player, "You will soon arrive in the Haven of Oceanus.");
 					break;
 				case "personal":

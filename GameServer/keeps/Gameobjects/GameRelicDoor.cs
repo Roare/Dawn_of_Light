@@ -151,7 +151,7 @@ namespace DOL.GS.Keeps
 			}
 
 
-			if (GameServer.ServerRules.IsSameRealm(player, this, true) || player.Client.Account.PrivLevel != 1)
+			if (GameServer.ServerRules.IsSameRealm(player, this, true) || PrivilegeMgr.IsGameMaster(player))
 			{
                 Point2D point;
 				//calculate x y

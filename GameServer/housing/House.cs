@@ -1213,7 +1213,7 @@ namespace DOL.GS.Housing
 				return false;
 
 			// owner and GMs+ can do everything
-			if (HasOwnerPermissions(player) || player.Client.Account.PrivLevel > 1)
+			if (HasOwnerPermissions(player) || PrivilegeMgr.IsGameMaster(player))
 				return true;
 
 			// get house permissions for the given player
@@ -1311,7 +1311,7 @@ namespace DOL.GS.Housing
 				return false;
 
 			// owner and GMs+ can do everything
-			if (HasOwnerPermissions(player) || player.Client.Account.PrivLevel > 1)
+			if (HasOwnerPermissions(player) || PrivilegeMgr.IsGameMaster(player))
 				return true;
 
 			// get player house permissions
@@ -1349,7 +1349,7 @@ namespace DOL.GS.Housing
 				return false;
 
 			// owner and GMs+ can do everything
-			if (HasOwnerPermissions(player) || player.Client.Account.PrivLevel > 1)
+			if (HasOwnerPermissions(player) || PrivilegeMgr.IsGameMaster(player))
 				return true;
 
 			// get player house permissions
@@ -1368,7 +1368,7 @@ namespace DOL.GS.Housing
 				return false;
 
 			// owner and GMs+ can do everything
-			if (HasOwnerPermissions(player) || player.Client.Account.PrivLevel > 1)
+			if (HasOwnerPermissions(player) || PrivilegeMgr.IsGameMaster(player))
 				return true;
 
 			// get player house permissions
@@ -1387,7 +1387,7 @@ namespace DOL.GS.Housing
 				return false;
 
 			// owner and GMs+ can do everything
-			if (HasOwnerPermissions(player) || player.Client.Account.PrivLevel > 1)
+			if (HasOwnerPermissions(player) || PrivilegeMgr.IsGameMaster(player))
 				return true;
 
 			// get player house permissions

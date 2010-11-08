@@ -41,22 +41,22 @@ namespace DOL.GS
 		public GameTeleporter()
 			: base() { }
 
-        /// <summary>
-        /// The type of teleporter; this is used in order to be able to handle
-        /// identical TeleportIDs differently, depending on the actual teleporter.
-        /// </summary>
-        protected virtual String Type
-        {
-            get { return ""; }
-        }
+		/// <summary>
+		/// The type of teleporter; this is used in order to be able to handle
+		/// identical TeleportIDs differently, depending on the actual teleporter.
+		/// </summary>
+		protected virtual String Type
+		{
+			get { return ""; }
+		}
 
-        /// <summary>
-        /// The destination realm. 
-        /// </summary>
-        protected virtual eRealm DestinationRealm
-        {
-            get { return Realm; }
-        }
+		/// <summary>
+		/// The destination realm.
+		/// </summary>
+		protected virtual eRealm DestinationRealm
+		{
+			get { return Realm; }
+		}
 
 		/// <summary>
 		/// Turn the teleporter to face the player.
@@ -99,7 +99,7 @@ namespace DOL.GS
 			// the level of the player, so let's deal with that first.
 			if (text.ToLower() == "battlegrounds")
 			{
-				if (!ServerProperties.Properties.BG_ZONES_OPENED && player.Client.Account.PrivLevel == (uint)ePrivLevel.Player)
+				if (!ServerProperties.Properties.BG_ZONES_OPENED &&  !PrivilegeMgr.IsGameMaster(player.Client))
 				{
 					SayTo(player, ServerProperties.Properties.BG_ZONES_CLOSED_MESSAGE);
 				}
@@ -121,7 +121,7 @@ namespace DOL.GS
 					}
 					else
 					{
-						if (player.Client.Account.PrivLevel > (uint)ePrivLevel.Player)
+						if (PrivilegeMgr.IsGameMaster(player.Client))
 						{
 							player.Out.SendMessage("No portal keep found.", eChatType.CT_Skill, eChatLoc.CL_SystemWindow);
 						}
@@ -227,15 +227,15 @@ namespace DOL.GS
 
 			// Spell not found in the database, fall back on default procedure.
 
-			if (player.Client.Account.PrivLevel > 1)
+			if (PrivilegeMgr.IsGameMaster(player))
 				player.Out.SendMessage("Uni-Portal spell not found.",
-					eChatType.CT_Skill, eChatLoc.CL_SystemWindow);
+				                       eChatType.CT_Skill, eChatLoc.CL_SystemWindow);
 			
 			this.OnTeleport(player, destination);
 		}
 
 		/// <summary>
-		/// Teleport the player to the designated coordinates. 
+		/// Teleport the player to the designated coordinates.
 		/// </summary>
 		/// <param name="player"></param>
 		/// <param name="destination"></param>

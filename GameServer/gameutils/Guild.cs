@@ -644,8 +644,8 @@ namespace DOL.GS
 				if (!m_guildMembers.ContainsKey(member.Name))
 					return false;
 
-				// If player have a privlevel above 1, it has access enough
-				if (member.Client.Account.PrivLevel > 1)
+				// If player have a privlevel GM+, it has access enough
+				if (PrivilegeMgr.IsGameMaster(member))
 					return true;
 				else // No guild leader, lets check if user rank is high enough in the guild
 				{

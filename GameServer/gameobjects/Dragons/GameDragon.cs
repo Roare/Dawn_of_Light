@@ -203,7 +203,7 @@ namespace DOL.GS
 
 				if (canReportNews && GameServer.ServerRules.CanGenerateNews(player) == false)
 				{
-					if (player.Client.Account.PrivLevel == (int)ePrivLevel.Player)
+					if (!PrivilegeMgr.IsGameMaster(player.Client))
 						canReportNews = false;
 				}
 

@@ -216,7 +216,7 @@ namespace DOL.GS.PacketHandler.Client.v168
 					bool goodname = true;
 					foreach (char c in userName.ToLower())
 					{
-						if ((c < '0' || c > '9') && (c < 'a' || c > 'z') && client.Account.PrivLevel == (uint)ePrivLevel.Player)
+						if ((c < '0' || c > '9') && (c < 'a' || c > 'z') && !PrivilegeMgr.IsGameMaster(client))
 						{
 							goodname = false;
 							break;
@@ -313,7 +313,7 @@ namespace DOL.GS.PacketHandler.Client.v168
 								playerAccount.LastLoginIP = ipAddress;
 								playerAccount.LastClientVersion = ((int)client.Version).ToString();
 								playerAccount.Language = Properties.SERV_LANGUAGE;
-								playerAccount.PrivLevel = 1;
+								playerAccount.PrivLevel = (uint)ePrivLevel.Player;
 
 								if (Log.IsInfoEnabled)
 									Log.Info("New account created: " + userName);

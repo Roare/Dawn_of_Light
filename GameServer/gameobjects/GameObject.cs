@@ -961,7 +961,7 @@ namespace DOL.GS
 		/// <returns>false if interaction is prevented</returns>
 		public virtual bool Interact(GamePlayer player)
 		{
-			if (player.Client.Account.PrivLevel == 1 && !this.IsWithinRadius(player, WorldMgr.INTERACT_DISTANCE))
+			if (!PrivilegeMgr.IsGameMaster(player) && !this.IsWithinRadius(player, WorldMgr.INTERACT_DISTANCE))
 			{
 				player.Out.SendMessage(LanguageMgr.GetTranslation("GameObject.Interact.TooFarAway", GetName(0, true)), eChatType.CT_System, eChatLoc.CL_SystemWindow);
 				Notify(GameObjectEvent.InteractFailed, this, new InteractEventArgs(player));
@@ -1145,7 +1145,7 @@ namespace DOL.GS
 				//Eden - avoid server freeze
 				if (CurrentRegion.GetZone(X, Y) == null)
 				{
-					if (this is GamePlayer && (this as GamePlayer).Client.Account.PrivLevel < 3 && !(this as GamePlayer).TempProperties.getProperty("isbeingbanned", false))
+					if (this is GamePlayer && !PrivilegeMgr.HavePrivilege(this as GamePlayer,ePrivLevel.Admin) && !(this as GamePlayer).TempProperties.getProperty("isbeingbanned", false))
 					{
 						GamePlayer player = this as GamePlayer;
 						player.TempProperties.setProperty("isbeingbanned", true);

@@ -21,10 +21,12 @@ using DOL.Database;
 using DOL.GS.PacketHandler;
 using DOL.Language;
 using System.Linq;
+using DOL.GS;
 
 namespace DOL.GS.Commands
 {
-	[CmdAttribute("&translate", ePrivLevel.GM,
+	[CmdAttribute("&translate",
+	              ePrivLevel.Translator,
 	              "'/translate <TranslationID> <text in your actual language>' : translate the string in current language",
 	              "'/translate showid <sentence>' : show the TranslationID related to the sentence",
 	              "example : '/translate Effects.StaticEffect.YouCantRemoveThisEffect You can't remove this effect!'")]

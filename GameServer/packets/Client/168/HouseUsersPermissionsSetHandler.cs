@@ -43,7 +43,7 @@ namespace DOL.GS.PacketHandler.Client.v168
 				return;
 
 			// can't set permissions unless you're the owner.
-			if (!house.HasOwnerPermissions(client.Player) && client.Account.PrivLevel <= 1)
+			if (!house.HasOwnerPermissions(client.Player) && !PrivilegeMgr.IsGameMaster(client))
 				return;
 
 			// check if we're setting or removing permissions

@@ -88,7 +88,7 @@ namespace DOL.GS.Keeps
 			//For players in New Frontiers only
 			if (player.CurrentRegionID == KeepMgr.NEW_FRONTIERS)
 			{
-				if (player.Client.Account.PrivLevel == (int)ePrivLevel.Player)
+				if (!PrivilegeMgr.IsGameMaster(player.Client))
 				{
 					if (player.Realm != this.Realm)
 						return false;

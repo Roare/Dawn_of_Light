@@ -399,7 +399,7 @@ namespace DOL.Language
 			if (client == null || client.Account == null)
 				return GetTranslation(DOL.GS.ServerProperties.Properties.SERV_LANGUAGE, TranslationID, args);
 
-			if(client.Player != null && client.Account.PrivLevel > 1)
+			if(client.Player != null && PrivilegeMgr.IsGameMaster(client))
 			{
 				bool debug = client.Player.TempProperties.getProperty("LANGUAGEMGR-DEBUG", false);
 				if (debug && IDSentences.ContainsKey(TranslationID))

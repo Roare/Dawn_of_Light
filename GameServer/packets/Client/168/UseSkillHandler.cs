@@ -189,14 +189,14 @@ namespace DOL.GS.PacketHandler.Client.v168
 						player.Out.SendMessage(
 							string.Format("You must wait {0} minutes {1} seconds to use this ability!", reuseTime/60000, reuseTime%60000/1000),
 							eChatType.CT_System, eChatLoc.CL_SystemWindow);
-						if (player.Client.Account.PrivLevel < 2) return;
+						if (!PrivilegeMgr.IsGameMaster(player)) return;
 					}
 					else if (reuseTime > 0)
 					{
 						player.Out.SendMessage(string.Format("You must wait {0} seconds to use this ability!", reuseTime/1000 + 1),
 						                       eChatType.CT_System, eChatLoc.CL_SystemWindow);
 						
-						if (player.Client.Account.PrivLevel < 2) 
+						if (!PrivilegeMgr.IsGameMaster(player)) 
 							return;
 					}
 

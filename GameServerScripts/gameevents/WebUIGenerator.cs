@@ -177,8 +177,8 @@ namespace DOL.GS.Scripts
 			int gm = 0;
 			int admin = 0;
 			foreach (GameClient client in WorldMgr.GetAllClients()) {
-				if (client.Account.PrivLevel == (int)ePrivLevel.GM) gm++;
-				if (client.Account.PrivLevel == (int)ePrivLevel.Admin) admin++;
+				if (PrivilegeMgr.HavePrivilege(client, ePrivLevel.GM) && !PrivilegeMgr.HavePrivilege(client, ePrivLevel.Admin)) gm++;
+				if (PrivilegeMgr.HavePrivilege(client, ePrivLevel.Admin) && !PrivilegeMgr.HavePrivilege(client, ePrivLevel.GM)) admin++;
 			}
 
 			m_js.AppendFormat("var numClientsConnected = {0}", GameServer.Instance.ClientCount);

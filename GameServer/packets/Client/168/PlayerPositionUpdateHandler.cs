@@ -221,7 +221,7 @@ namespace DOL.GS.PacketHandler.Client.v168
 
 			#region DEBUG
 			#if OUTPUT_DEBUG_INFO
-			if (lastTick != 0 && client.Account.PrivLevel == 1)
+			if (lastTick != 0 && !PrivilegeMgr.IsGameMaster(client))
 			{
 				int tickDiff = Environment.TickCount - lastTick;
 				int maxDist = 0;
@@ -352,7 +352,7 @@ namespace DOL.GS.PacketHandler.Client.v168
 					{
 						SHcount++;
 
-						if (SHcount > 1 && client.Account.PrivLevel > 1)
+						if (SHcount > 1 && PrivilegeMgr.IsGameMaster(client))
 						{
 							client.Out.SendMessage(string.Format("SH: ({0}) detected: {1}, count {2}", 500 / (EnvironmentTick - SHlastTick), EnvironmentTick - SHlastTick, SHcount), eChatType.CT_Damaged, eChatLoc.CL_SystemWindow);
 						}
@@ -382,7 +382,7 @@ namespace DOL.GS.PacketHandler.Client.v168
 								}
 							}
 
-							if ((client.Account.PrivLevel == 1) && SHcount >= ServerProperties.Properties.SPEEDHACK_TOLERANCE)
+							if ((!PrivilegeMgr.IsGameMaster(client)) && SHcount >= ServerProperties.Properties.SPEEDHACK_TOLERANCE)
 							{
 								if (ServerProperties.Properties.BAN_HACKERS)
 								{

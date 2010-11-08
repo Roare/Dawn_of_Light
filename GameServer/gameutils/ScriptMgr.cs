@@ -272,7 +272,7 @@ namespace DOL.GS
 				//If there is no such command, return false
 				if (myCommand == null) return false;
 
-				if (client.Account.PrivLevel < myCommand.m_lvl)
+				if (!PrivilegeMgr.HavePrivilege(client, (ePrivLevel)myCommand.m_lvl))
 				{
 					if (!SinglePermission.HasPermission(client.Player, pars[0].Substring(1, pars[0].Length - 1)))
 					{
@@ -393,7 +393,7 @@ namespace DOL.GS
 			pars[0] = myCommand.m_cmd;
 
 			//Log the command usage
-			if (client.Account == null || ((ServerProperties.Properties.LOG_ALL_GM_COMMANDS && client.Account.PrivLevel > 1) || myCommand.m_lvl > 1))
+			if (client.Account == null || ((ServerProperties.Properties.LOG_ALL_GM_COMMANDS && PrivilegeMgr.IsGameMaster(client)) || myCommand.m_lvl > 1))
 			{
 				string commandText = String.Join(" ", pars);
 				string targetName = "(no target)";

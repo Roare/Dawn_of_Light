@@ -66,7 +66,7 @@ namespace DOL.GS.GameEvents
 					continue;
 
 				string message = LanguageMgr.GetTranslation(pclient, "Scripts.Events.PlayerEnterExit.Entered", player.Name);
-				if (player.Client.Account.PrivLevel > 1)
+				if (PrivilegeMgr.IsGameMaster(player.Client))
 					message = LanguageMgr.GetTranslation(pclient, "Scripts.Events.PlayerEnterExit.Staff", message);
 				else
 				{
@@ -99,7 +99,7 @@ namespace DOL.GS.GameEvents
 					continue;
 
 				string message = LanguageMgr.GetTranslation(pclient, "Scripts.Events.PlayerEnterExit.Left", player.Name);
-				if (player.Client.Account.PrivLevel > 1)
+				if (PrivilegeMgr.IsGameMaster(player))
 					message = LanguageMgr.GetTranslation(pclient, "Scripts.Events.PlayerEnterExit.Staff", message);
 				else
 				{

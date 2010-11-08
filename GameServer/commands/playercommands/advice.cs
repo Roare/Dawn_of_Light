@@ -58,7 +58,7 @@ namespace DOL.GS.Commands
 					if (playerClient.Player == null) continue;
 					if (playerClient.Player.Advisor &&
 					   ((playerClient.Player.Realm == client.Player.Realm && playerClient.Player.IsAnonymous == false) ||
-					   client.Account.PrivLevel > 1))
+					     PrivilegeMgr.IsGameMaster(client)))
 					{
 						total++;
 						client.Out.SendMessage(total + ")" + playerClient.Player.Name + (playerClient.Player.IsAnonymous ? " [ANON]" : ""), eChatType.CT_System, eChatLoc.CL_SystemWindow);
@@ -73,7 +73,7 @@ namespace DOL.GS.Commands
 				if (playerClient.Player == null) continue;
 				if ((playerClient.Player.Advisor &&
 					playerClient.Player.Realm == client.Player.Realm) ||
-					playerClient.Account.PrivLevel > 1)
+					PrivilegeMgr.IsGameMaster(playerClient))
 					playerClient.Out.SendMessage(LanguageMgr.GetTranslation(client, "Scripts.Players.Advice.Advice", getRealmString(client.Player.Realm), client.Player.Name, msg), eChatType.CT_Staff, eChatLoc.CL_ChatWindow);
 
 			}

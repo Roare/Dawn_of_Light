@@ -133,7 +133,7 @@ namespace DOL.GS.ServerRules
 				if (WorldMgr.GetAllClients().Count >= Properties.MAX_PLAYERS)
 				{
 					// GMs are still allowed to enter server
-					if (account == null || (account.PrivLevel == 1 && account.Status <= 0))
+					if (account == null || (!PrivilegeMgr.IsGameMaster(account) && account.Status <= 0))
 					{
 						// Normal Players will not be allowed over the max
 						client.Out.SendLoginDenied(eLoginError.TooManyPlayersLoggedIn);
@@ -146,7 +146,7 @@ namespace DOL.GS.ServerRules
 
 			if (Properties.STAFF_LOGIN)
 			{
-				if (account == null || account.PrivLevel == 1)
+				if (account == null || !PrivilegeMgr.IsGameMaster(account))
 				{
 					// GMs are still allowed to enter server
 					// Normal Players will not be allowed to Log in
@@ -158,14 +158,14 @@ namespace DOL.GS.ServerRules
 
 			if (!Properties.ALLOW_DUAL_LOGINS)
 			{
-				if ((account == null || account.PrivLevel == 1) && client.TcpEndpointAddress != "not connected")
+				if ((account == null || !PrivilegeMgr.IsGameMaster(account)) && client.TcpEndpointAddress != "not connected")
 				{
 					foreach (GameClient cln in WorldMgr.GetAllClients())
 					{
 						if (cln == null || client == cln) continue;
 						if (cln.TcpEndpointAddress == client.TcpEndpointAddress)
 						{
-							if (cln.Account != null && cln.Account.PrivLevel > 1)
+							if (cln.Account != null && PrivilegeMgr.IsGameMaster(cln))
 							{
 								break;
 							}
@@ -251,7 +251,7 @@ namespace DOL.GS.ServerRules
 					return false;
 
 			//GMs can't be attacked
-			if (playerDefender != null && playerDefender.Client.Account.PrivLevel > 1)
+			if (playerDefender != null && PrivilegeMgr.IsGameMaster(playerDefender))
 				return false;
 
 			//safe area support for defender
@@ -423,7 +423,7 @@ namespace DOL.GS.ServerRules
 			if (player.Steed != null) return "GamePlayer.UseSlot.MustDismountBefore";
 			
 			// gm/admin overrides the other checks
-			if (player.Client.Account.PrivLevel != (uint)ePrivLevel.Player) return string.Empty;
+			if (PrivilegeMgr.IsGameMaster(player)) return string.Empty;
 			
 			// player restrictions
 			if (player.IsMoving) return "GamePlayer.UseSlot.CantMountMoving";
@@ -462,7 +462,7 @@ namespace DOL.GS.ServerRules
 		
 		public virtual bool CanTakeFallDamage(GamePlayer player)
 		{
-			if (player.Client.Account.PrivLevel > 1)
+			if (PrivilegeMgr.IsGameMaster(player))
 				return false;
 
 			return true;
@@ -1060,7 +1060,7 @@ namespace DOL.GS.ServerRules
 					{
 						//If a gameplayer with privlevel > 1 attacked the
 						//mob, then the players won't gain xp ...
-						if (((GamePlayer)obj).Client.Account.PrivLevel > 1)
+						if (PrivilegeMgr.IsGameMaster(obj as GamePlayer))
 						{
 							dealNoXP = true;
 							break;
@@ -1213,7 +1213,7 @@ namespace DOL.GS.ServerRules
 					{
 						//If a gameplayer with privlevel > 1 attacked the
 						//mob, then the players won't gain xp ...
-						if (((GamePlayer)obj).Client.Account.PrivLevel > 1)
+						if (PrivilegeMgr.IsGameMaster(obj as GamePlayer))
 						{
 							dealNoXP = true;
 							break;
@@ -1473,7 +1473,7 @@ namespace DOL.GS.ServerRules
 
 			// clients with priv level > 1 are considered friendly by anyone
 			GamePlayer playerTarget = target as GamePlayer;
-			if (playerTarget != null && playerTarget.Client.Account.PrivLevel > 1) return (byte)player.Realm;
+			if (playerTarget != null && PrivilegeMgr.IsGameMaster(playerTarget)) return (byte)player.Realm;
 
 			return (byte)target.Realm;
 		}
@@ -1746,7 +1746,7 @@ namespace DOL.GS.ServerRules
 		/// <returns>true if the player is allowed to generate news</returns>
 		public virtual bool CanGenerateNews(GamePlayer player)
 		{
-			if (player.Client.Account.PrivLevel > 1)
+			if (PrivilegeMgr.IsGameMaster(player))
 				return false;
 
 			return true;

@@ -67,7 +67,7 @@ namespace DOL.GS.PropertyCalc
 				if (speed == 1 && !player.InCombat && !player.IsStealthed && !player.CurrentRegion.IsRvR)
 					speed *= 1.25; // new run speed is 125% when no buff
 
-				if (player.IsOverencumbered && player.Client.Account.PrivLevel < 2)
+				if (player.IsOverencumbered && !PrivilegeMgr.IsGameMaster(player))
 				{
 					double Enc = player.Encumberance; // calculating player.Encumberance is a bit slow with all those locks, don't call it much
 					if (Enc > player.MaxEncumberance)

@@ -97,7 +97,7 @@ namespace DOL.GS.Commands
 				return;
 			}
 
-			if (client.Account.PrivLevel > target.Client.Account.PrivLevel)
+			if (PrivilegeMgr.IsGameMaster(client) && !PrivilegeMgr.IsGameMaster(target.Client))
 			{
 				// you have no choice!
 

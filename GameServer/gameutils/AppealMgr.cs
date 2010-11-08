@@ -311,7 +311,7 @@ namespace DOL.GS.Appeal
 		{
 			GamePlayer player = sender as GamePlayer;
 			if (player == null) { return; }
-			if (player.Client.Account.PrivLevel > (uint)ePrivLevel.Player)
+			if (PrivilegeMgr.IsGameMaster(player.Client))
 			{
 
 				StaffList.Add(player);
@@ -351,7 +351,7 @@ namespace DOL.GS.Appeal
 			GamePlayer player = sender as GamePlayer;
 			if (player == null)
 				return;
-			if (player.Client.Account.PrivLevel > (uint)ePrivLevel.Player)
+			if (PrivilegeMgr.IsGameMaster(player.Client))
 			{
 				StaffList.Remove(player);
 			}

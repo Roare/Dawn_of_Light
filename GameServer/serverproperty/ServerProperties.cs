@@ -998,12 +998,6 @@ namespace DOL.GS.ServerProperties
 		/// </summary>
 		[ServerProperty("pve","max_camp_bonus", "Max camp bonus", 2.0)]
 		public static double MAX_CAMP_BONUS;
-
-		/// <summary>
-		/// Minimum privilege level to be able to enter Atlantis through teleporters.
-		/// </summary>
-		[ServerProperty("pve","atlantis_teleport_plvl", "Set the minimum privilege level required to enter Atlantis zones.", 2)]
-		public static int ATLANTIS_TELEPORT_PLVL;
 		#endregion
 		
 		#region HOUSING

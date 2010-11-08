@@ -111,7 +111,7 @@ namespace DOL.GS.ServerRules
 			}
 
 			// clients with priv level > 1 are considered friendly by anyone
-			if(target is GamePlayer && ((GamePlayer)target).Client.Account.PrivLevel > 1) return true;
+			if(target is GamePlayer && PrivilegeMgr.IsGameMaster(target as GamePlayer)) return true;
 
 			// mobs can heal mobs, players heal players/NPC
 			if(source.Realm == 0 && target.Realm == 0) return true;

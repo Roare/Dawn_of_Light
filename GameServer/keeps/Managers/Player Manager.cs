@@ -110,7 +110,7 @@ namespace DOL.GS.Keeps
 			{
 				if (client.Player == null)
 					continue;
-				if ((client.Account.PrivLevel != 1 || realm == eRealm.None) || client.Player.Realm == realm)
+				if ((PrivilegeMgr.IsGameMaster(client) || realm == eRealm.None) || client.Player.Realm == realm)
 				{
 					client.Out.SendMessage(message, eChatType.CT_Important, eChatLoc.CL_SystemWindow);
 				}
@@ -140,7 +140,7 @@ namespace DOL.GS.Keeps
 		/// <returns></returns>
 		public static bool IsAllowedToInteract(GamePlayer player, AbstractGameKeep keep, eInteractType type)
 		{
-			if (player.Client.Account.PrivLevel > 1)
+			if (PrivilegeMgr.IsGameMaster(player))
 				return true;
 			if (player.Realm != keep.Realm)
 				return false;

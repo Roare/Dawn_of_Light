@@ -185,7 +185,7 @@ namespace DOL.GS
 		}
 
 		/// <summary>
-		/// Make the item when craft time is finished 
+		/// Make the item when craft time is finished
 		/// </summary>
 		protected virtual int MakeItem(RegionTimer timer)
 		{
@@ -356,7 +356,7 @@ namespace DOL.GS
 					{
 						player.Out.SendMessage("(" + rawmaterial.Count + ") " + rawmaterial.ItemTemplate.Name, eChatType.CT_System, eChatLoc.CL_SystemWindow);
 					}
-					if (player.Client.Account.PrivLevel == (uint)ePrivLevel.Player) return false;
+					if (!PrivilegeMgr.IsGameMaster(player.Client)) return false;
 				}
 
 				return true;
@@ -604,7 +604,7 @@ namespace DOL.GS
 
 			switch (con)
 			{
-				// Chance to MAKE ! (100 - chance to fail)
+					// Chance to MAKE ! (100 - chance to fail)
 				case -3:
 					return 100;
 				case -2:

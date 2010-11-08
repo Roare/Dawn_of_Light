@@ -248,7 +248,7 @@ namespace DOL.GS.Keeps
 		{
 			IList list = base.GetExamineMessages(player);
 
-			if (player.Client.Account.PrivLevel > 1)
+			if (PrivilegeMgr.IsGameMaster(player))
 			{
 				list.Add(Name + " with a Z of " + Z.ToString());
 			}

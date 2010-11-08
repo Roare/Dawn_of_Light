@@ -714,7 +714,7 @@ namespace DOL.GS.Keeps
 				int needed = ServerProperties.Properties.CLAIM_NUM;
 				if (this is GameKeepTower)
 					needed = needed / 2;
-				if (player.Client.Account.PrivLevel > 1)
+				if (PrivilegeMgr.IsGameMaster(player))
 					needed = 0;
 				if (count < needed)
 				{

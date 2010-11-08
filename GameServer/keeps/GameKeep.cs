@@ -90,7 +90,7 @@ namespace DOL.GS.Keeps
 		public override bool CheckForClaim(GamePlayer player)
 		{
 			//let gms do everything
-			if (player.Client.Account.PrivLevel > 1)
+			if (PrivilegeMgr.IsGameMaster(player))
 				return true;
 
 			if (player.Group == null)

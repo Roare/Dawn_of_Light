@@ -106,8 +106,9 @@ namespace DOL.GS.Commands
 						// --------------------------------------------------------------------------------
 					case "create":
 						{
-							if (client.Account.PrivLevel == (uint)ePrivLevel.Player)
-								return;
+							if (!PrivilegeMgr.IsGameMaster(client))
+								return;	
+							
 							if (args.Length < 3)
 							{
 								client.Out.SendMessage(LanguageMgr.GetTranslation(client, "Scripts.Player.Guild.Help.GuildGMCreate"), eChatType.CT_System, eChatLoc.CL_SystemWindow);
@@ -160,7 +161,7 @@ namespace DOL.GS.Commands
 						// --------------------------------------------------------------------------------
 					case "purge":
 						{
-							if (client.Account.PrivLevel == (uint)ePrivLevel.Player)
+							if (!PrivilegeMgr.IsGameMaster(client))
 								return;
 
 							if (args.Length < 3)
@@ -185,7 +186,7 @@ namespace DOL.GS.Commands
 						// --------------------------------------------------------------------------------
 					case "rename":
 						{
-							if (client.Account.PrivLevel == (uint)ePrivLevel.Player)
+							if (!PrivilegeMgr.IsGameMaster(client))
 								return;
 
 							if (args.Length < 5)
@@ -224,7 +225,7 @@ namespace DOL.GS.Commands
 						// --------------------------------------------------------------------------------
 					case "addplayer":
 						{
-							if (client.Account.PrivLevel == (uint)ePrivLevel.Player)
+							if (!PrivilegeMgr.IsGameMaster(client))
 								return;
 
 							if (args.Length < 5)
@@ -254,7 +255,7 @@ namespace DOL.GS.Commands
 						// --------------------------------------------------------------------------------
 					case "removeplayer":
 						{
-							if (client.Account.PrivLevel == (uint)ePrivLevel.Player)
+							if (!PrivilegeMgr.IsGameMaster(client))
 								return;
 
 							if (args.Length < 5)
@@ -671,7 +672,7 @@ namespace DOL.GS.Commands
 
 							client.Player.Guild.UpdateGuildWindow();
 
-							if (client.Player.Guild.BountyPoints > bannerPrice || client.Account.PrivLevel > (int)ePrivLevel.Player)
+							if (client.Player.Guild.BountyPoints > bannerPrice || PrivilegeMgr.IsGameMaster(client))
 							{
 								client.Out.SendCustomDialog("Are you sure you buy a guild banner for " + bannerPrice + " guild bounty points? ", ConfirmBannerBuy);
 								client.Player.TempProperties.setProperty(GUILD_BANNER_PRICE, bannerPrice);
@@ -698,7 +699,7 @@ namespace DOL.GS.Commands
 								client.Out.SendMessage(LanguageMgr.GetTranslation(client, "Scripts.Player.Guild.BannerNone"), eChatType.CT_System, eChatLoc.CL_SystemWindow);
 								return;
 							}
-							if (client.Player.Group == null && client.Account.PrivLevel == (int)ePrivLevel.Player)
+							if (client.Player.Group == null && !PrivilegeMgr.IsGameMaster(client))
 							{
 								client.Out.SendMessage(LanguageMgr.GetTranslation(client, "Scripts.Player.Guild.BannerNoGroup"), eChatType.CT_System, eChatLoc.CL_SystemWindow);
 								return;
@@ -901,7 +902,7 @@ namespace DOL.GS.Commands
 								client.Out.SendMessage(LanguageMgr.GetTranslation(client, "Scripts.Player.Guild.BannerNone"), eChatType.CT_System, eChatLoc.CL_SystemWindow);
 								return;
 							}
-							if (client.Player.Group == null && client.Account.PrivLevel == (int)ePrivLevel.Player)
+							if (client.Player.Group == null && !PrivilegeMgr.IsGameMaster(client))
 							{
 								client.Out.SendMessage(LanguageMgr.GetTranslation(client, "Scripts.Player.Guild.BannerNoGroup"), eChatType.CT_System, eChatLoc.CL_SystemWindow);
 								return;
@@ -1070,7 +1071,7 @@ namespace DOL.GS.Commands
 							{
 								if (!GuildMgr.DoesGuildExist(guildname))
 								{
-									if (Properties.GUILD_NUM > 1 && client.Account.PrivLevel == 1)
+									if (Properties.GUILD_NUM > 1 && !PrivilegeMgr.IsGameMaster(client))
 									{
 										Group group = client.Player.Group;
 
@@ -2419,7 +2420,7 @@ namespace DOL.GS.Commands
 			if (bannerPrice == 0 || player.Guild.GuildBanner)
 				return;
 
-			if (player.Guild.BountyPoints >= bannerPrice || player.Client.Account.PrivLevel > (int)ePrivLevel.Player)
+			if (player.Guild.BountyPoints >= bannerPrice || PrivilegeMgr.IsGameMaster(player.Client))
 			{
 				player.Guild.RemoveBountyPoints(bannerPrice);
 				player.Guild.GuildBanner = true;
@@ -2538,7 +2539,7 @@ namespace DOL.GS.Commands
 
 		public void DisplayHelp(GameClient client)
 		{
-			if (client.Account.PrivLevel > 1)
+			if (PrivilegeMgr.IsGameMaster(client))
 			{
 				client.Out.SendMessage(LanguageMgr.GetTranslation(client, "Scripts.Player.Guild.Help.GuildGMCommands"), eChatType.CT_Guild, eChatLoc.CL_SystemWindow);
 				client.Out.SendMessage(LanguageMgr.GetTranslation(client, "Scripts.Player.Guild.Help.GuildGMCreate"), eChatType.CT_Guild, eChatLoc.CL_SystemWindow);

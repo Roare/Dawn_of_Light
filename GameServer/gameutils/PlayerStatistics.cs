@@ -184,7 +184,7 @@ namespace DOL.GS
                 {
                     var account = GameServer.Database.SelectObject<Account>("Name = '" + chr.AccountName + "'");
 
-                    if (account != null && account.PrivLevel == 1)
+                    if (account != null && !PrivilegeMgr.IsGameMaster(account))
                     {
                         toplist.Add("\n" + count.ToString() + " - [ " + chr.Name + " ] with " + String.Format("{0:0,0}", chr.RealmPoints) + " RP - [ " + (((chr.RealmLevel + 10) / 10) + "L" + ((chr.RealmLevel + 10) % 10)) + " ]");
                         if (++count > 20)
@@ -209,7 +209,7 @@ namespace DOL.GS
 
             foreach (GameClient c in WorldMgr.GetAllPlayingClients())
             {
-                if (c == null || c.Account.PrivLevel != 1 || c.Player.DBCharacter.IgnoreStatistics)
+            	if (c == null || PrivilegeMgr.IsGameMaster(c) || c.Player.DBCharacter.IgnoreStatistics)
                     continue;
 
                 PlayerStatistics stats = c.Player.Statistics as PlayerStatistics;

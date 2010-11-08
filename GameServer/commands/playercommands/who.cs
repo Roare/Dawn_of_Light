@@ -87,13 +87,13 @@ namespace DOL.GS.Commands
 			{
 				GamePlayer addPlayer = serverClient.Player;
 				if (addPlayer == null) continue;
-				if (serverClient.Account.PrivLevel > (uint)ePrivLevel.Player && serverClient.Player.IsAnonymous == false)
+				if (PrivilegeMgr.IsGameMaster(serverClient) && serverClient.Player.IsAnonymous == false)
 				{
 					clientsList.Add(addPlayer.Client);
 					continue;
 				}
 				if (addPlayer.Client != client // allways add self
-				    && client.Account.PrivLevel == (uint)ePrivLevel.Player
+				    && !PrivilegeMgr.IsGameMaster(client)
 				    && (addPlayer.IsAnonymous
 				        || !GameServer.ServerRules.IsSameRealm(addPlayer, client.Player, true)))
 					continue;
@@ -282,11 +282,11 @@ namespace DOL.GS.Commands
 			{
 				result.Append(" <ADV>");
 			}
-			if(player.Client.Account.PrivLevel == (uint)ePrivLevel.GM)
+			if(PrivilegeMgr.HavePrivilege(player.Client, ePrivLevel.GM))
 			{
 				result.Append(" <GM>");
 			}
-			if(player.Client.Account.PrivLevel == (uint)ePrivLevel.Admin)
+			if(PrivilegeMgr.HavePrivilege(player.Client, ePrivLevel.Admin))
 			{
 				result.Append(" <Admin>");
 			}
@@ -415,7 +415,7 @@ namespace DOL.GS.Commands
 		{
 			public bool ApplyFilter(GamePlayer player)
 			{
-				if(!player.IsAnonymous && player.Client.Account.PrivLevel > (uint)ePrivLevel.Player)
+				if(!player.IsAnonymous && PrivilegeMgr.IsGameMaster(player.Client))
 					return true;
 				return false;
 			}

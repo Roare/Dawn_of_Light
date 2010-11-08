@@ -42,7 +42,7 @@ namespace DOL.GS.PacketHandler.Client.v168
 				return;
 
 			// player has no owner permissions and isn't a GM or admin, return
-			if (!house.HasOwnerPermissions(client.Player) && client.Account.PrivLevel <= 1)
+			if (!house.HasOwnerPermissions(client.Player) && !PrivilegeMgr.IsGameMaster(client))
 				return;
 
 			// build the packet

@@ -214,7 +214,7 @@ namespace DOL.GS.Quests
 					}
 
 					// The following lines allow the GM to drop the task item
-					if (player.Client.Account.PrivLevel != 1)
+					if (PrivilegeMgr.IsGameMaster(player))
 						lowestCon = 0;
 
 					//Only add task Loot if not killing grays

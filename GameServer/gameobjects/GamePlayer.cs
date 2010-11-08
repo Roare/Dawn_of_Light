@@ -163,10 +163,7 @@ namespace DOL.GS
 		{
 			get
 			{
-				if (Client.Account.PrivLevel > (int)ePrivLevel.Player)
-					return true;
-
-				return false;
+				return PrivilegeMgr.IsGameMaster(Client);
 			}
 		}
 
@@ -314,7 +311,7 @@ namespace DOL.GS
 		{
 			get
 			{
-				return (Client.Account.PrivLevel < 2 && base.IsAttackable);
+				return (!PrivilegeMgr.IsGameMaster(Client) && base.IsAttackable);
 			}
 		}
 
@@ -459,7 +456,7 @@ namespace DOL.GS
 			}
 
 			//Gms can quit instantly
-			if (Client.Account.PrivLevel == 1)
+			if (!PrivilegeMgr.IsGameMaster(Client))
 			{
 				if (CraftTimer != null && CraftTimer.IsAlive)
 				{
@@ -661,7 +658,7 @@ namespace DOL.GS
 		private void CheckIfNearEnemyKeepAndAddToRvRLinkDeathListIfNecessary()
 		{
 			AbstractGameKeep keep = KeepMgr.getKeepCloseToSpot(this.CurrentRegionID, this, WorldMgr.VISIBILITY_DISTANCE);
-			if(keep != null && this.Client.Account.PrivLevel == 1 && KeepMgr.IsEnemy(keep, this))
+			if(keep != null && !PrivilegeMgr.IsGameMaster(Client) && KeepMgr.IsEnemy(keep, this))
 			{
 				if(WorldMgr.RvRLinkDeadPlayers.ContainsKey(this.m_InternalID))
 				{
@@ -940,7 +937,7 @@ namespace DOL.GS
 			}
 			long lastBindTick = TempProperties.getProperty<long>(LAST_BIND_TICK);
 			long changeTime = CurrentRegion.Time - lastBindTick;
-			if (Client.Account.PrivLevel == 1 && changeTime < 60000 && changeTime > 0) //60 second rebind timer
+			if (!PrivilegeMgr.IsGameMaster(Client) && changeTime < 60000 && changeTime > 0) //60 second rebind timer
 			{
 				Out.SendMessage(LanguageMgr.GetTranslation(Client, "GamePlayer.Bind.MustWait", (1 + (60000 - changeTime) / 1000)), eChatType.CT_System, eChatLoc.CL_SystemWindow);
 				return;
@@ -1828,7 +1825,7 @@ namespace DOL.GS
 					base.Model = value;
 
 					// Only GM's can persist model changes - Tolakram
-					if (Client.Account.PrivLevel > (int)ePrivLevel.Player && DBCharacter != null && DBCharacter.CurrentModel != base.Model)
+					if (PrivilegeMgr.IsGameMaster(Client) && DBCharacter != null && DBCharacter.CurrentModel != base.Model)
 					{
 						DBCharacter.CurrentModel = base.Model;
 					}
@@ -4298,7 +4295,7 @@ namespace DOL.GS
 
 			RealmPoints += amount;
 
-			if (m_guild != null && Client.Account.PrivLevel == 1)
+			if (m_guild != null && !PrivilegeMgr.IsGameMaster(Client))
 				m_guild.RealmPoints += amount;
 
 			if (sendMessage == true && amount > 0)
@@ -4445,7 +4442,7 @@ namespace DOL.GS
 
 			BountyPoints += amount;
 
-			if (m_guild != null && Client.Account.PrivLevel == 1)
+			if (m_guild != null && !PrivilegeMgr.IsGameMaster(Client))
 				m_guild.BountyPoints += amount;
 
 			if(sendMessage == true)
@@ -7793,7 +7790,7 @@ namespace DOL.GS
 		/// <param name="duration">duration of disable in milliseconds</param>
 		public override void DisableSkill(Skill skill, int duration)
 		{
-			if (this.Client.Account.PrivLevel > 1)
+			if (PrivilegeMgr.IsGameMaster(Client))
 				return;
 
 			base.DisableSkill(skill, duration);
@@ -8796,7 +8793,7 @@ namespace DOL.GS
 
 								long nextPotionAvailTime = TempProperties.getProperty<long>(NEXT_POTION_AVAIL_TIME + "_Type" + (spell.SharedTimerGroup));
 
-								if (Client.Account.PrivLevel == 1 && nextPotionAvailTime > CurrentRegion.Time)
+								if (!PrivilegeMgr.IsGameMaster(Client) && nextPotionAvailTime > CurrentRegion.Time)
 								{
 									Out.SendMessage(LanguageMgr.GetTranslation(Client, "GamePlayer.UseSlot.MustWaitBeforeUse", (nextPotionAvailTime - CurrentRegion.Time) / 1000), eChatType.CT_System, eChatLoc.CL_SystemWindow);
 								}
@@ -8912,7 +8909,7 @@ namespace DOL.GS
 								{
 									Out.SendMessage("In your state you can't discharge any object.", eChatType.CT_System, eChatLoc.CL_SystemWindow);
 								}
-								else if (Client.Account.PrivLevel == 1 && (changeTime < delay || (CurrentRegion.Time - itemdelay) < itemreuse)) //2 minutes reuse timer
+								else if (!PrivilegeMgr.IsGameMaster(Client) && (changeTime < delay || (CurrentRegion.Time - itemdelay) < itemreuse)) //2 minutes reuse timer
 								{
 									if ((CurrentRegion.Time - itemdelay) < itemreuse)
 									{
@@ -9047,7 +9044,7 @@ namespace DOL.GS
 				return false;
 
 			int cooldown = item.CanUseAgainIn;
-			if (cooldown > 0 && Client.Account.PrivLevel == (uint)ePrivLevel.Player)
+			if (cooldown > 0 && !PrivilegeMgr.IsGameMaster(Client))
 			{
 				int minutes = cooldown / 60;
 				int seconds = cooldown % 60;
@@ -9206,7 +9203,7 @@ namespace DOL.GS
 				var sender = source as GamePlayer;
 				foreach (string Name in IgnoreList)
 				{
-					if (sender.Name == Name && sender.Client.Account.PrivLevel < 2)
+					if (sender.Name == Name && !PrivilegeMgr.IsGameMaster(Client))
 						return true;
 				}
 			}
@@ -9266,7 +9263,7 @@ namespace DOL.GS
 				return true;
 
 			eChatType type = eChatType.CT_Send;
-			if (source.Client.Account.PrivLevel > 1)
+			if (PrivilegeMgr.IsGameMaster(source))
 				type = eChatType.CT_Staff;
 
 			if (GameServer.ServerRules.IsAllowedToUnderstand(source, this))
@@ -9320,7 +9317,7 @@ namespace DOL.GS
 				return false;
 			}
 
-			if (Client.Account.PrivLevel == 1 && target.Client.Account.PrivLevel > 1 && target.IsAnonymous)
+			if (!PrivilegeMgr.IsGameMaster(Client) && PrivilegeMgr.IsGameMaster(target) && target.IsAnonymous)
 				return true;
 
 			Out.SendMessage(LanguageMgr.GetTranslation(Client, "GamePlayer.Send.YouSendTo", str, target.Name), eChatType.CT_Send,
@@ -9653,7 +9650,7 @@ namespace DOL.GS
 				DismountSteed(true);
 				if (CurrentRegion.GetZone(X, Y) == null)
 				{
-					if (this is GamePlayer && this.Client.Account.PrivLevel < 3 && !(this as GamePlayer).TempProperties.getProperty("isbeingbanned", false))
+					if (this is GamePlayer && !PrivilegeMgr.HavePrivilege(this,ePrivLevel.Admin) && !(this as GamePlayer).TempProperties.getProperty("isbeingbanned", false))
 					{
 						GamePlayer player = this as GamePlayer;
 						player.TempProperties.setProperty("isbeingbanned", true);
@@ -10352,7 +10349,7 @@ namespace DOL.GS
 		{
 			if (!IsAlive || ObjectState != eObjectState.Active)
 				return 0;
-			if (this.Client.Account.PrivLevel == 1)
+			if (!PrivilegeMgr.IsGameMaster(Client))
 			{
 				Out.SendMessage(LanguageMgr.GetTranslation(Client, "GamePlayer.DrowningTimerCallback.CannotBreath"), eChatType.CT_Damaged, eChatLoc.CL_SystemWindow);
 				Out.SendMessage(LanguageMgr.GetTranslation(Client, "GamePlayer.DrowningTimerCallback.Take5%Damage"), eChatType.CT_Damaged, eChatLoc.CL_SystemWindow);
@@ -10415,6 +10412,9 @@ namespace DOL.GS
 
 		public void Diving(waterBreath state)
 		{
+			if (PrivilegeMgr.IsGameMaster(Client))
+				return;
+			
 			//bool changeSpeed = false;
 			if (m_currentWaterBreathState != state)
 			{
@@ -10465,7 +10465,7 @@ namespace DOL.GS
 		{
 			if (!IsAlive || ObjectState != eObjectState.Active || !IsSwimming)
 				return 0;
-			if (this.Client.Account.PrivLevel == 1)
+			if (!PrivilegeMgr.IsGameMaster(Client))
 			{
 				Out.SendMessage(LanguageMgr.GetTranslation(Client, "GamePlayer.LavaBurnTimerCallback.YourInLava"), eChatType.CT_Damaged, eChatLoc.CL_SystemWindow);
 				Out.SendMessage(LanguageMgr.GetTranslation(Client, "GamePlayer.LavaBurnTimerCallback.Take34%Damage"), eChatType.CT_Damaged, eChatLoc.CL_SystemWindow);
@@ -11265,8 +11265,8 @@ namespace DOL.GS
 					uint privLevel1 = Client.Account.PrivLevel;
 					uint privLevel2 = sourcePlayer.Client.Account.PrivLevel;
 					if (privLevel1 != privLevel2
-					    && (privLevel1 > 1 || privLevel2 > 1)
-					    && (privLevel1 == 1 || privLevel2 == 1))
+					    && (PrivilegeMgr.IsGameMaster(Client) || PrivilegeMgr.IsGameMaster(sourcePlayer))
+					    && (!PrivilegeMgr.IsGameMaster(Client) || !PrivilegeMgr.IsGameMaster(sourcePlayer)))
 					{
 						GameServer.Instance.LogGMAction("   Item: " + source.Name + "(" + sourcePlayer.Client.Account.Name + ") -> " + Name + "(" + Client.Account.Name + ") : " + item.Name + "(" + item.Id_nb + ")");
 					}
@@ -11368,7 +11368,7 @@ namespace DOL.GS
 			if (floorObject.ObjectState != eObjectState.Active)
 				return false;
 
-			if (floorObject is GameStaticItemTimed && ((GameStaticItemTimed)floorObject).IsOwner(this) == false && Client.Account.PrivLevel == (int)ePrivLevel.Player)
+			if (floorObject is GameStaticItemTimed && ((GameStaticItemTimed)floorObject).IsOwner(this) == false && !PrivilegeMgr.IsGameMaster (Client))
 			{
 				Out.SendMessage(LanguageMgr.GetTranslation(Client, "GamePlayer.PickupObject.LootDoesntBelongYou"), eChatType.CT_System, eChatLoc.CL_SystemWindow);
 				return false;
@@ -11931,7 +11931,7 @@ namespace DOL.GS
 			if (allpoints != mypoints)
 			{
 				log.WarnFormat("Spec points total for player {0} incorrect: {1} instead of {2}.", Name, mypoints, allpoints);
-				if (Client.Account.PrivLevel == 1)
+				if (!PrivilegeMgr.IsGameMaster(Client))
 				{
 					mypoints = RespecAllLines();
 					SkillSpecialtyPoints = allpoints;
@@ -12162,7 +12162,7 @@ namespace DOL.GS
 			try
 			{
 				// Ff this player is a GM always check and set the IgnoreStatistics flag
-				if (Client.Account.PrivLevel > 1 && m_dbCharacter.IgnoreStatistics == false)
+				if (PrivilegeMgr.IsGameMaster(Client) && m_dbCharacter.IgnoreStatistics == false)
 				{
 					m_dbCharacter.IgnoreStatistics = true;
 				}
@@ -12345,7 +12345,7 @@ namespace DOL.GS
 			{//FIXME: Better extract this to a new function in ServerRules !!! (VaNaTiC)
 				case eGameServerType.GST_Normal:
 					{
-						if (Realm == player.Realm || Client.Account.PrivLevel > 1 || player.Client.Account.PrivLevel > 1)
+						if (Realm == player.Realm || PrivilegeMgr.IsGameMaster(Client) || PrivilegeMgr.IsGameMaster(player))
 							message = LanguageMgr.GetTranslation(player.Client, "GamePlayer.GetExamineMessages.RealmMember", player.GetName(this), GetPronoun(Client, 0, true), CharacterClass.Name);
 						else
 							message = LanguageMgr.GetTranslation(player.Client, "GamePlayer.GetExamineMessages.EnemyRealmMember", player.GetName(this), GetPronoun(Client, 0, true));
@@ -12354,11 +12354,11 @@ namespace DOL.GS
 
 				case eGameServerType.GST_PvP:
 					{
-						if (Client.Account.PrivLevel > 1 || player.Client.Account.PrivLevel > 1)
+						if (PrivilegeMgr.IsGameMaster(Client) || PrivilegeMgr.IsGameMaster(player))
 							message = LanguageMgr.GetTranslation(player.Client, "GamePlayer.GetExamineMessages.YourGuildMember", player.GetName(this), GetPronoun(Client, 0, true), CharacterClass.Name);
 						else if (Guild == null)
 							message = LanguageMgr.GetTranslation(player.Client, "GamePlayer.GetExamineMessages.NeutralMember", player.GetName(this), GetPronoun(Client, 0, true));
-						else if (Guild == player.Guild || Client.Account.PrivLevel > 1 || player.Client.Account.PrivLevel > 1)
+						else if (Guild == player.Guild || PrivilegeMgr.IsGameMaster(Client) || PrivilegeMgr.IsGameMaster(player))
 							message = LanguageMgr.GetTranslation(player.Client, "GamePlayer.GetExamineMessages.YourGuildMember", player.GetName(this), GetPronoun(Client, 0, true), CharacterClass.Name);
 						else
 							message = LanguageMgr.GetTranslation(player.Client, "GamePlayer.GetExamineMessages.OtherGuildMember", player.GetName(this), GetPronoun(Client, 0, true), GuildName);
@@ -12529,7 +12529,7 @@ namespace DOL.GS
 			protected override void OnTick()
 			{
 				GamePlayer player = (GamePlayer)m_actionSource;
-				if (player.Client.Account.PrivLevel > 1) return;
+				if (PrivilegeMgr.IsGameMaster(player)) return;
 
 				bool checklos = false;
 				foreach (AbstractArea area in player.CurrentAreas)
@@ -12649,9 +12649,9 @@ namespace DOL.GS
 				return false;
 			if (enemy.EffectList.GetOfType(typeof(VanishEffect)) != null)
 				return false;
-			if (this.Client.Account.PrivLevel > 1)
+			if (PrivilegeMgr.IsGameMaster(Client))
 				return true;
-			if (enemy.Client.Account.PrivLevel > 1)
+			if (PrivilegeMgr.IsGameMaster(enemy))
 				return false;
 
 			/*
@@ -13077,7 +13077,7 @@ namespace DOL.GS
 		{
 			get
 			{
-				if (Guild == null || Client.Account.PrivLevel > 1 || m_isEligibleToGiveMeritPoints == false)
+				if (Guild == null || PrivilegeMgr.IsGameMaster(Client) || m_isEligibleToGiveMeritPoints == false)
 					return false;
 				
 				return true;

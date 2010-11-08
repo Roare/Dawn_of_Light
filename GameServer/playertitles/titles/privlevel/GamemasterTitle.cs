@@ -69,7 +69,7 @@ namespace DOL.GS.PlayerTitles
 		public override bool IsSuitable(GamePlayer player)
 		{
 			//2
-			return (player.Client.Account.PrivLevel == 2);
+			return (PrivilegeMgr.HavePrivilege(player,ePrivLevel.GM));
 		}
 		
 		/// <summary>

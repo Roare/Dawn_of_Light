@@ -353,7 +353,7 @@ namespace DOL.GS
 			lock(Sync)
 			{
 				// allow admin and gm account opened windows to trade any item
-				if (this.m_owner.Client.Account.PrivLevel == 1)
+				if (!PrivilegeMgr.IsGameMaster(this.m_owner))
 				{
 					if (!itemForTrade.IsDropable || !itemForTrade.IsPickable || itemForTrade.IsNotLosingDur || !itemForTrade.IsTradable)
 						return false;
@@ -443,7 +443,7 @@ namespace DOL.GS
 				if (!m_partnerWindow.m_tradeAccept) return false;
 
 				bool logTrade = ServerProperties.Properties.LOG_TRADES;
-				if (m_owner.Client.Account.PrivLevel > 1 || partner.Client.Account.PrivLevel > 1)
+				if (PrivilegeMgr.IsGameMaster(m_owner) || PrivilegeMgr.IsGameMaster(partner))
 					logTrade = true;
 
 				//Test if we and our partner have enough money

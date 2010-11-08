@@ -654,7 +654,7 @@ namespace DOL.GS.Spells
 				int left = m_caster.GetSkillDisabledDuration(m_spell);
 				if (left > 0)
 				{
-					if (m_caster is NecromancerPet && ((m_caster as NecromancerPet).Owner as GamePlayer).Client.Account.PrivLevel > (int)ePrivLevel.Player)
+					if (m_caster is NecromancerPet && PrivilegeMgr.IsGameMaster(((m_caster as NecromancerPet).Owner as GamePlayer).Client))
 					{
 						// Ignore Recast Timer
 					}

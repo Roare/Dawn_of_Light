@@ -24,7 +24,7 @@ namespace DOL.GS
 				{
 					if (client.Player == null)
 						continue;
-					if ((client.Account.PrivLevel != 1 || realm == eRealm.None) || client.Player.Realm == realm)
+					if ((!PrivilegeMgr.IsGameMaster(client) || realm == eRealm.None) || client.Player.Realm == realm)
 					{
 						client.Out.SendMessage(message, eChatType.CT_System, eChatLoc.CL_SystemWindow);
 					}

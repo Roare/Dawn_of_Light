@@ -896,9 +896,9 @@ namespace DOL.GS
 		{
 			int ticks = spell.CastTime;
 
-			if (spell.InstrumentRequirement != 0 || 
-				line.KeyName == GlobalSpellsLines.Item_Spells || 
-				line.KeyName.StartsWith(GlobalSpellsLines.Champion_Spells))
+			if (spell.InstrumentRequirement != 0 ||
+			    line.KeyName == GlobalSpellsLines.Item_Spells ||
+			    line.KeyName.StartsWith(GlobalSpellsLines.Champion_Spells))
 			{
 				return ticks;
 			}
@@ -5690,7 +5690,7 @@ namespace DOL.GS
 			{
 				player = source as GamePlayer;
 				long whisperdelay = player.TempProperties.getProperty<long>("WHISPERDELAY");
-				if (whisperdelay > 0 && (CurrentRegion.Time - 1500) < whisperdelay && player.Client.Account.PrivLevel == 1)
+				if (whisperdelay > 0 && (CurrentRegion.Time - 1500) < whisperdelay && !PrivilegeMgr.IsGameMaster(player))
 				{
 					//player.Out.SendMessage("Speak slower!", eChatType.CT_ScreenCenter, eChatLoc.CL_SystemWindow);
 					return false;
@@ -5925,7 +5925,7 @@ namespace DOL.GS
 					bool valid = false;
 					string[] allowedclasses = item.AllowedClasses.Split(';');
 					foreach (string allowed in allowedclasses)
-						if ((this as GamePlayer).CharacterClass.ID.ToString() == allowed || (this as GamePlayer).Client.Account.PrivLevel > 1) { valid = true; break; }
+						if ((this as GamePlayer).CharacterClass.ID.ToString() == allowed || PrivilegeMgr.IsGameMaster(this as GamePlayer)) { valid = true; break; }
 					if (!valid) return false;
 				}
 			}

@@ -113,7 +113,7 @@ namespace DOL.GS.PacketHandler.Client.v168
 					}
 
 
-					if(client.Account.PrivLevel == (uint)ePrivLevel.Player && tradeTarget != null && tradeTarget.Client.Account.PrivLevel != (uint)ePrivLevel.Player)
+					if(!PrivilegeMgr.IsGameMaster(client) && tradeTarget != null && PrivilegeMgr.IsGameMaster (tradeTarget.Client))
 					{
 						if(!item.IsDropable && !(obj is GameNPC && (obj is Blacksmith || obj is Recharger || (obj as GameNPC).CanTradeAnyItem)))
 						{
